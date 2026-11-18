@@ -29,14 +29,14 @@ const CONFIG = {
 
   // Daftar asal pimpinan (muncul di dropdown form)
   PIMPINAN: [
-    'Pimpinan Daerah IPM Kota Samarinda',
-    'Pimpinan Daerah IPM Kota Balikpapan',
-    'Pimpinan Daerah IPM Kota Bontang',
-    'Pimpinan Daerah IPM Kabupaten Penajam Paser Utara',
-    'Pimpinan Daerah IPM Kabupaten Paser',
-    'Pimpinan Daerah IPM Kabupaten Berau',
-    'Pimpinan Daerah IPM Kabupaten Kutai Kartanegara',
-    'Pimpinan Daerah IPM Kabupaten Kutai Timur'
+    'PD IPM Kota Samarinda',
+    'PD IPM Kota Balikpapan',
+    'PD IPM Kota Bontang',
+    'PD IPM Kabupaten Penajam Paser Utara',
+    'PD IPM Kabupaten Paser',
+    'PD IPM Kabupaten Berau',
+    'PD IPM Kabupaten Kutai Kartanegara',
+    'PD IPM Kabupaten Kutai Timur'
   ],
 
   MAKS_NAMA: 30,     // batas jumlah nama per pendaftaran
@@ -167,7 +167,12 @@ function daftar_(p) {
     const sudah = data.slice(1).some(function (r) { return r[2] === pimpinan; });
     if (sudah) throw new Error(pimpinan + ' sudah terdaftar. Hubungi panitia kalau ada perubahan data.');
 
-    const id = 'RKW-' + ('00' + data.length).slice(-3);
+    // Nomor = nomor terbesar yang masih ada + 1 (aman kalau ada baris dihapus)
+    const maks = data.slice(1).reduce(function (m, r) {
+      const n = parseInt(String(r[0]).replace(/\D/g, ''), 10);
+      return n > m ? n : m;
+    }, 0);
+    const id = 'RKW-' + ('00' + (maks + 1)).slice(-3);
     const folder = folder_();
     const urlMandat = simpanFile_(folder, p.suratMandat, id + ' - Surat Mandat - ' + pimpinan);
     const urlBukti = metode === 'transfer'

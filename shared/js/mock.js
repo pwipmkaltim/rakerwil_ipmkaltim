@@ -16,14 +16,14 @@ window.RKW = window.RKW || {};
     atasNama: 'Bendahara PW IPM Kaltim',
     batasBayarOffline: 'Paling lambat saat registrasi ulang di hari pelaksanaan.',
     pimpinan: [
-      'Pimpinan Daerah IPM Kota Samarinda',
-      'Pimpinan Daerah IPM Kota Balikpapan',
-      'Pimpinan Daerah IPM Kota Bontang',
-      'Pimpinan Daerah IPM Kabupaten Penajam Paser Utara',
-      'Pimpinan Daerah IPM Kabupaten Paser',
-      'Pimpinan Daerah IPM Kabupaten Berau',
-      'Pimpinan Daerah IPM Kabupaten Kutai Kartanegara',
-      'Pimpinan Daerah IPM Kabupaten Kutai Timur'
+      'PD IPM Kota Samarinda',
+      'PD IPM Kota Balikpapan',
+      'PD IPM Kota Bontang',
+      'PD IPM Kabupaten Penajam Paser Utara',
+      'PD IPM Kabupaten Paser',
+      'PD IPM Kabupaten Berau',
+      'PD IPM Kabupaten Kutai Kartanegara',
+      'PD IPM Kabupaten Kutai Timur'
     ],
     maksNama: 30,
     maksFileMB: 5,
@@ -59,7 +59,8 @@ window.RKW = window.RKW || {};
       if (d.daftar.some(function (x) { return x.pimpinan === p.pimpinan; })) {
         throw new Error(p.pimpinan + ' sudah terdaftar. Hubungi panitia kalau ada perubahan data.');
       }
-      var id = 'RKW-' + ('00' + (d.daftar.length + 1)).slice(-3);
+      var maks = d.daftar.reduce(function (m, x) { var n = parseInt(x.id.replace(/\D/g, ''), 10); return n > m ? n : m; }, 0);
+      var id = 'RKW-' + ('00' + (maks + 1)).slice(-3);
       var totalSwp = DEMO.swp * nama.length;
       var r = {
         id: id, waktu: now(), pimpinan: p.pimpinan, jumlah: nama.length, swp: DEMO.swp,

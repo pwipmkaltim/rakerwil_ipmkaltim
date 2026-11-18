@@ -56,6 +56,19 @@ button, input, select { font: inherit; color: inherit; }
 }
 .logo-badge img { height: 44px; width: auto; display: block; }
 
+/* Logo di halaman pendaftaran = pintu masuk admin.
+ * Sengaja tidak terlihat seperti tombol: kursor biasa, tanpa efek hover,
+ * tanpa menu tahan-lama di HP. */
+.pintu {
+  display: inline-block; flex: 0 0 auto;
+  cursor: default;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  user-select: none;
+  outline: none;
+}
+.pintu img { pointer-events: none; -webkit-user-drag: none; }
+
 /* ---------- Tombol ---------- */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;

@@ -26,12 +26,25 @@ window.RKW = window.RKW || {};
     if (el) el.hidden = !yes;
   };
 
-  R.TIPE_FILE = ['application/pdf', 'image/jpeg', 'image/png'];
+  // Format file yang diterima (harus sama dengan TIPE_MANDAT / TIPE_BUKTI di Code.gs)
+  R.TIPE_MANDAT = { tipe: ['application/pdf'], pesan: 'Surat mandat harus berformat PDF.' };
+  R.TIPE_BUKTI = {
+    tipe: ['application/pdf', 'image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif'],
+    pesan: 'Format harus PDF, JPG, PNG, WEBP, atau HEIC.'
+  };
+
+  /** Tipe file; kalau browser tidak mengenali (sering terjadi pada HEIC), tebak dari ekstensi */
+  R.tipeFile = function (file) {
+    if (file.type) return file.type;
+    var ext = (file.name.split('.').pop() || '').toLowerCase();
+    return { pdf: 'application/pdf', jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png',
+      webp: 'image/webp', heic: 'image/heic', heif: 'image/heif' }[ext] || '';
+  };
 
   /** Cek file, kembalikan pesan error atau '' kalau aman. */
-  R.cekFile = function (file, maksMB) {
+  R.cekFile = function (file, maksMB, aturan) {
     if (!file) return 'File belum dipilih.';
-    if (R.TIPE_FILE.indexOf(file.type) < 0) return 'Format harus PDF, JPG, atau PNG.';
+    if (aturan.tipe.indexOf(R.tipeFile(file)) < 0) return aturan.pesan;
     if (file.size > maksMB * 1024 * 1024) return 'Ukuran maksimal ' + maksMB + ' MB.';
     return '';
   };
@@ -41,7 +54,7 @@ window.RKW = window.RKW || {};
     return new Promise(function (resolve, reject) {
       var fr = new FileReader();
       fr.onload = function () {
-        resolve({ name: file.name, type: file.type, data: String(fr.result).split(',')[1] });
+        resolve({ name: file.name, type: R.tipeFile(file), data: String(fr.result).split(',')[1] });
       };
       fr.onerror = function () { reject(new Error('Gagal membaca file.')); };
       fr.readAsDataURL(file);

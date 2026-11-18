@@ -117,13 +117,13 @@
   /* ---------- File ---------- */
 
   document.addEventListener('change', function (e) {
-    if (e.target.matches('#f-mandat')) labelFile(e.target, '#mandat-label', '#mandat-err');
-    if (e.target.matches('#f-bukti')) labelFile(e.target, '#bukti-label', '#bukti-err');
+    if (e.target.matches('#f-mandat')) labelFile(e.target, '#mandat-label', '#mandat-err', R.TIPE_MANDAT);
+    if (e.target.matches('#f-bukti')) labelFile(e.target, '#bukti-label', '#bukti-err', R.TIPE_BUKTI);
     if (e.target.name === 'metode') pilihMetode();
     if (e.target.matches('#f-pimpinan')) err('#pimpinan-err', '');
   });
 
-  function labelFile(input, labelSel, errSel) {
+  function labelFile(input, labelSel, errSel, aturan) {
     var f = input.files[0];
     var lbl = $(labelSel);
     var drop = input.closest('.file-drop');
@@ -132,7 +132,7 @@
       drop.classList.remove('terisi');
       return;
     }
-    var pesan = R.cekFile(f, cfg.maksFileMB);
+    var pesan = R.cekFile(f, cfg.maksFileMB, aturan);
     err(errSel, pesan);
     if (pesan) {
       input.value = '';
@@ -187,7 +187,7 @@
     else err('#nama-err', '');
 
     var m = $('#f-mandat').files[0];
-    var pesan = m ? R.cekFile(m, cfg.maksFileMB) : 'Surat mandat wajib diunggah.';
+    var pesan = m ? R.cekFile(m, cfg.maksFileMB, R.TIPE_MANDAT) : 'Surat mandat wajib diunggah.';
     err('#mandat-err', pesan);
     if (pesan) ok = false;
 
@@ -246,7 +246,7 @@
     if (!metode) { err('#metode-err', 'Pilih cara pembayaran.'); ok = false; }
     var bukti = $('#f-bukti').files[0];
     if (metode === 'transfer') {
-      var p = bukti ? R.cekFile(bukti, cfg.maksFileMB) : 'Bukti transfer wajib diunggah.';
+      var p = bukti ? R.cekFile(bukti, cfg.maksFileMB, R.TIPE_BUKTI) : 'Bukti transfer wajib diunggah.';
       err('#bukti-err', p);
       if (p) ok = false;
     }

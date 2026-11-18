@@ -29,14 +29,14 @@ const CONFIG = {
 
   // Daftar asal pimpinan (muncul di dropdown form)
   PIMPINAN: [
-    'PD IPM Kota Samarinda',
-    'PD IPM Kota Balikpapan',
-    'PD IPM Kota Bontang',
-    'PD IPM Kabupaten Penajam Paser Utara',
-    'PD IPM Kabupaten Paser',
-    'PD IPM Kabupaten Berau',
-    'PD IPM Kabupaten Kutai Kartanegara',
-    'PD IPM Kabupaten Kutai Timur'
+    'PD IPM Samarinda',
+    'PD IPM Balikpapan',
+    'PD IPM Bontang',
+    'PD IPM Penajam Paser Utara',
+    'PD IPM Paser',
+    'PD IPM Berau',
+    'PD IPM Kutai Kartanegara',
+    'PD IPM Kutai Timur'
   ],
 
   MAKS_NAMA: 30,     // batas jumlah nama per pendaftaran
@@ -65,6 +65,13 @@ const HEAD_PESERTA = [
   'Status Hadir', 'Waktu Hadir', 'Cara Absen', 'ID Perangkat'
 ];
 const STATUS_BAYAR = ['Belum Bayar', 'Menunggu Verifikasi', 'Lunas'];
+
+// Format file yang diterima (tipe -> ekstensi)
+const TIPE_MANDAT = { 'application/pdf': '.pdf' };
+const TIPE_BUKTI = {
+  'application/pdf': '.pdf', 'image/jpeg': '.jpg', 'image/png': '.png',
+  'image/webp': '.webp', 'image/heic': '.heic', 'image/heif': '.heif'
+};
 
 const ACTIONS = {
   config: config_,
@@ -173,10 +180,12 @@ function daftar_(p) {
       return n > m ? n : m;
     }, 0);
     const id = 'RKW-' + ('00' + (maks + 1)).slice(-3);
-    const folder = folder_();
-    const urlMandat = simpanFile_(folder, p.suratMandat, id + ' - Surat Mandat - ' + pimpinan);
+    // Berkas disimpan di subfolder per pimpinan, contoh:
+    // Berkas Rakerwil PW IPM Kaltim / PD IPM Samarinda / Mandat_PD IPM Samarinda.pdf
+    const folder = folderPimpinan_(pimpinan);
+    const urlMandat = simpanFile_(folder, p.suratMandat, 'Mandat_' + pimpinan, TIPE_MANDAT);
     const urlBukti = metode === 'transfer'
-      ? simpanFile_(folder, p.bukti, id + ' - Bukti Transfer - ' + pimpinan) : '';
+      ? simpanFile_(folder, p.bukti, 'Bukti Bayar_' + pimpinan, TIPE_BUKTI) : '';
 
     const swp = Number(CONFIG.SWP) || 0;
     const swo = Number(CONFIG.SWO) || 0;
@@ -346,9 +355,18 @@ function folder_() {
   return f;
 }
 
-function simpanFile_(folder, f, nama) {
-  const tipe = { 'application/pdf': '.pdf', 'image/jpeg': '.jpg', 'image/png': '.png' };
-  if (!f || !tipe[f.type]) throw new Error('Format file harus PDF, JPG, atau PNG.');
+function folderPimpinan_(pimpinan) {
+  const induk = folder_();
+  const ada = induk.getFoldersByName(pimpinan);
+  return ada.hasNext() ? ada.next() : induk.createFolder(pimpinan);
+}
+
+function simpanFile_(folder, f, nama, tipe) {
+  if (!f || !tipe[f.type]) {
+    throw new Error(tipe === TIPE_MANDAT
+      ? 'Surat mandat harus berformat PDF.'
+      : 'Format bukti bayar harus PDF, JPG, PNG, WEBP, atau HEIC.');
+  }
   const bytes = Utilities.base64Decode(f.data);
   if (bytes.length > CONFIG.MAKS_FILE_MB * 1024 * 1024) {
     throw new Error('Ukuran file maksimal ' + CONFIG.MAKS_FILE_MB + ' MB.');

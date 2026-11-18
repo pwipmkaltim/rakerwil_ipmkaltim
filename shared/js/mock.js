@@ -16,14 +16,14 @@ window.RKW = window.RKW || {};
     atasNama: 'Bendahara PW IPM Kaltim',
     batasBayarOffline: 'Paling lambat saat registrasi ulang di hari pelaksanaan.',
     pimpinan: [
-      'PD IPM Kota Samarinda',
-      'PD IPM Kota Balikpapan',
-      'PD IPM Kota Bontang',
-      'PD IPM Kabupaten Penajam Paser Utara',
-      'PD IPM Kabupaten Paser',
-      'PD IPM Kabupaten Berau',
-      'PD IPM Kabupaten Kutai Kartanegara',
-      'PD IPM Kabupaten Kutai Timur'
+      'PD IPM Samarinda',
+      'PD IPM Balikpapan',
+      'PD IPM Bontang',
+      'PD IPM Penajam Paser Utara',
+      'PD IPM Paser',
+      'PD IPM Berau',
+      'PD IPM Kutai Kartanegara',
+      'PD IPM Kutai Timur'
     ],
     maksNama: 30,
     maksFileMB: 5,

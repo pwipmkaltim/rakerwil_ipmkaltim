@@ -10,5 +10,5 @@
  * tapi di backend/Code.gs bagian CONFIG (yang ada di editor Apps Script).
  */
 window.RKW_CONFIG = {
-  API_URL: ''
+  API_URL: 'https://script.google.com/macros/s/AKfycbz1xvbr3fKYq8QEj1zfHDvoCWdUuCjfV4Xep9qp_1T17kBF8r2o0XT9tGFZ8KnG7JMU/exec'
 };

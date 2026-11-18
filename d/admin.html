@@ -17,7 +17,7 @@
 <!-- Login -->
 <div id="login-view" class="d-login-wrap" hidden>
   <div class="d-login">
-    <span class="logo-mark">IPM</span>
+    <span class="logo-badge"><img src="../shared/img/logo-pw.png" alt="Logo PW IPM Kalimantan Timur"></span>
     <h1>Meja Registrasi</h1>
     <p class="muted" style="margin-bottom:22px">Khusus panitia. Masukkan password admin.</p>
     <label class="field">
@@ -33,7 +33,7 @@
 <div id="dash-view" class="d-admin" hidden>
   <aside class="d-side">
     <div>
-      <span class="logo-mark" style="margin-bottom:12px">IPM</span>
+      <img class="logo" style="margin-bottom:14px" src="../shared/img/logo-pw.png" alt="Logo PW IPM Kalimantan Timur">
       <h1>Meja Registrasi</h1>
       <small>Rakerwil PW IPM Kaltim</small>
     </div>
@@ -55,7 +55,7 @@
     </div>
 
     <div class="bawah">
-      <a class="btn btn-side btn-sm" href="../cetak-qr.html" target="_blank">Cetak QR absensi</a>
+      <button class="btn btn-side btn-sm" id="btn-qr">QR absensi</button>
       <button class="btn btn-side btn-sm" id="btn-logout">Keluar</button>
     </div>
   </aside>
@@ -80,6 +80,7 @@
   </main>
 </div>
 
+<script src="../shared/js/lib/qrcode.min.js"></script>
 <script src="../shared/js/config.js"></script>
 <script src="../shared/js/util.js"></script>
 <script src="../shared/js/mock.js"></script>

@@ -98,6 +98,54 @@ window.RKW = window.RKW || {};
     toastTimer = setTimeout(function () { t.className = 'toast'; }, 3500);
   };
 
+  var IKON = {
+    tanya: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></svg>',
+    bahaya: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.3 3.9L1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01"/></svg>',
+    qr: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"/></svg>'
+  };
+
+  /**
+   * Pop-up pengganti confirm() bawaan browser.
+   * R.konfirmasi({ judul, pesan, ok, batal, bahaya, ikon, isi }) -> Promise<boolean>
+   * isi = HTML tambahan (opsional), batal: false = tanpa tombol batal
+   */
+  R.konfirmasi = function (o) {
+    o = o || {};
+    return new Promise(function (resolve) {
+      var latar = document.createElement('div');
+      latar.className = 'modal-latar';
+      latar.innerHTML =
+        '<div class="modal" role="dialog" aria-modal="true">' +
+          '<div class="modal-ikon' + (o.bahaya ? ' bahaya' : '') + '">' + IKON[o.ikon || (o.bahaya ? 'bahaya' : 'tanya')] + '</div>' +
+          '<h3>' + R.esc(o.judul || 'Yakin?') + '</h3>' +
+          (o.pesan ? '<p class="modal-pesan">' + R.esc(o.pesan) + '</p>' : '') +
+          (o.isi ? '<div class="modal-isi">' + o.isi + '</div>' : '') +
+          '<div class="modal-aksi">' +
+            (o.batal === false ? '' : '<button class="btn btn-ghost" data-jawab="0">' + R.esc(o.batal || 'Batal') + '</button>') +
+            '<button class="btn ' + (o.bahaya ? 'btn-bahaya' : 'btn-primary') + '" data-jawab="1">' + R.esc(o.ok || 'Ya, lanjutkan') + '</button>' +
+          '</div>' +
+        '</div>';
+      document.body.appendChild(latar);
+      requestAnimationFrame(function () { latar.classList.add('tampil'); });
+      latar.querySelector('[data-jawab="1"]').focus();
+
+      function tutup(hasil) {
+        document.removeEventListener('keydown', tombol);
+        latar.classList.remove('tampil');
+        setTimeout(function () { latar.remove(); }, 220);
+        resolve(hasil);
+      }
+      function tombol(e) { if (e.key === 'Escape') tutup(false); }
+      document.addEventListener('keydown', tombol);
+      latar.addEventListener('click', function (e) {
+        if (e.target === latar) return tutup(false);
+        var b = e.target.closest('[data-jawab]');
+        if (b) tutup(b.getAttribute('data-jawab') === '1');
+      });
+      if (o.saatTampil) o.saatTampil(latar);
+    });
+  };
+
   R.badgeBayar = function (status) {
     var cls = status === 'Lunas' ? 'ok' : (status === 'Menunggu Verifikasi' ? 'warn' : 'bad');
     return '<span class="badge ' + cls + '">' + R.esc(status || '-') + '</span>';

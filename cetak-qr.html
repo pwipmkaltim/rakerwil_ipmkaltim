@@ -18,7 +18,7 @@
       display: flex; flex-direction: column;
       box-shadow: var(--shadow);
     }
-    .atas { background: var(--grad); color: #fff; text-align: center; padding: 56px 40px 48px; }
+    .atas { background: var(--grad); color: #fff; text-align: center; padding: 44px 40px 44px; }
     .atas small { font-size: 18px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; opacity: .85; }
     .atas h1 { font-size: 46px; font-weight: 800; line-height: 1.1; margin-top: 8px; }
     .atas p { font-size: 18px; opacity: .9; margin-top: 10px; }
@@ -48,6 +48,7 @@
 
   <div class="kertas">
     <div class="atas">
+      <img src="shared/img/logo-pw.png" alt="Logo PW IPM Kalimantan Timur" style="height:110px;margin:0 auto 18px;display:block">
       <small>Absensi Peserta</small>
       <h1>Rapat Kerja Wilayah</h1>
       <p>Pimpinan Wilayah Ikatan Pelajar Muhammadiyah Kalimantan Timur</p>
@@ -64,7 +65,7 @@
     <div class="bawah">Satu HP untuk satu peserta. Ada kendala? Hubungi meja registrasi.</div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="shared/js/lib/qrcode.min.js"></script>
   <script>
     var url = new URL('absen.html', location.href).href;
     document.getElementById('url').textContent = url;

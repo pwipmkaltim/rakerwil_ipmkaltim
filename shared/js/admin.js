@@ -110,8 +110,8 @@
   function kartu(r, orang) {
     var h = r.peserta.filter(function (p) { return p.hadir; }).length;
     var tombolBayar = r.statusBayar === 'Lunas'
-      ? '<button class="btn btn-ghost btn-sm" data-act="batal-lunas" data-id="' + R.esc(r.id) + '" data-bukti="' + (r.bukti ? 1 : 0) + '">Batalkan lunas</button>'
-      : '<button class="btn btn-primary btn-sm" data-act="lunas" data-id="' + R.esc(r.id) + '">Tandai lunas</button>';
+      ? '<button class="btn btn-ghost btn-sm" data-act="batal-lunas" data-id="' + R.esc(r.id) + '" data-nama="' + R.esc(r.pimpinan) + '" data-bukti="' + (r.bukti ? 1 : 0) + '">Batalkan lunas</button>'
+      : '<button class="btn btn-primary btn-sm" data-act="lunas" data-id="' + R.esc(r.id) + '" data-nama="' + R.esc(r.pimpinan) + '">Tandai lunas</button>';
     var berkas = '<a class="link" href="' + R.esc(r.suratMandat) + '" target="_blank" rel="noopener">Surat mandat</a>' +
       (r.bukti ? '<a class="link" href="' + R.esc(r.bukti) + '" target="_blank" rel="noopener">Bukti transfer</a>' : '');
 
@@ -147,6 +147,7 @@
     if (e.target.closest('#btn-login')) { e.preventDefault(); masuk(); return; }
     if (e.target.closest('#btn-logout')) { keluar(); return; }
     if (e.target.closest('#btn-refresh')) { refresh(); return; }
+    if (e.target.closest('#btn-qr')) { e.preventDefault(); tampilQR(); return; }
 
     var b = e.target.closest('[data-act]');
     if (!b) return;
@@ -154,16 +155,17 @@
     var id = b.getAttribute('data-id');
     var aksi;
 
+    var nama = b.getAttribute('data-nama') || id;
     if (act === 'lunas') {
-      if (!confirm('Tandai ' + id + ' sebagai LUNAS?')) return;
+      if (!(await R.konfirmasi({ judul: 'Tandai lunas?', pesan: nama + ' (' + id + ') akan ditandai sudah membayar SWP dan SWO.', ok: 'Ya, lunas' }))) return;
       aksi = api('setBayar', { id: id, status: 'Lunas' });
     } else if (act === 'batal-lunas') {
-      if (!confirm('Batalkan status lunas ' + id + '?')) return;
+      if (!(await R.konfirmasi({ judul: 'Batalkan status lunas?', pesan: 'Status bayar ' + nama + ' akan dikembalikan.', ok: 'Batalkan lunas', batal: 'Kembali', bahaya: true }))) return;
       aksi = api('setBayar', { id: id, status: b.getAttribute('data-bukti') === '1' ? 'Menunggu Verifikasi' : 'Belum Bayar' });
     } else if (act === 'hadir') {
       aksi = api('absenManual', { idPeserta: id, hadir: true });
     } else if (act === 'batal-hadir') {
-      if (!confirm('Batalkan kehadiran ' + b.getAttribute('data-nama') + '?')) return;
+      if (!(await R.konfirmasi({ judul: 'Batalkan kehadiran?', pesan: nama + ' akan kembali berstatus belum hadir.', ok: 'Batalkan hadir', batal: 'Kembali', bahaya: true }))) return;
       aksi = api('absenManual', { idPeserta: id, hadir: false });
     }
     if (!aksi) return;
@@ -182,6 +184,28 @@
     }
   });
 
+  /** Pop-up QR absensi, dengan pilihan buka halaman cetak */
+  async function tampilQR() {
+    var url = new URL('../absen.html', location.href).href;
+    var cetak = await R.konfirmasi({
+      ikon: 'qr',
+      judul: 'QR Absensi',
+      pesan: 'Peserta scan QR ini untuk absen. QR hanya berfungsi saat absensi dibuka.',
+      isi: '<div class="qr-kotak" id="qr-modal"></div><p class="qr-url">' + R.esc(url) + '</p>',
+      ok: 'Buka halaman cetak',
+      batal: 'Tutup',
+      saatTampil: function (el) {
+        var box = el.querySelector('#qr-modal');
+        if (window.QRCode) {
+          new QRCode(box, { text: url, width: 220, height: 220, colorDark: '#10302a', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M });
+        } else {
+          box.innerHTML = '<p class="muted">Gagal memuat QR. Cek koneksi internet.</p>';
+        }
+      }
+    });
+    if (cetak) window.open('../cetak-qr.html', '_blank');
+  }
+
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Enter' && e.target.matches('#f-password')) { e.preventDefault(); masuk(); }
   });
@@ -194,7 +218,10 @@
     if (e.target.matches('#filter') && data) render();
     if (e.target.matches('#toggle-absen')) {
       var buka = e.target.checked;
-      if (!confirm(buka ? 'Buka absensi sekarang? Peserta bisa absen lewat scan QR.' : 'Tutup absensi? Scan QR tidak bisa dipakai lagi.')) {
+      var setuju = await R.konfirmasi(buka
+        ? { judul: 'Buka absensi?', pesan: 'Peserta bisa langsung absen lewat scan QR.', ok: 'Buka absensi' }
+        : { judul: 'Tutup absensi?', pesan: 'Scan QR tidak bisa dipakai lagi. Absen manual dari halaman ini tetap bisa.', ok: 'Tutup absensi', bahaya: true });
+      if (!setuju) {
         e.target.checked = !buka;
         return;
       }

@@ -16,7 +16,7 @@
 
 <div id="login-view" class="m-login-wrap" hidden>
   <div class="m-login">
-    <span class="logo-mark">IPM</span>
+    <span class="logo-badge"><img src="../shared/img/logo-pw.png" alt="Logo PW IPM Kalimantan Timur"></span>
     <h1>Meja Registrasi</h1>
     <p class="muted" style="margin-bottom:20px;font-size:14px">Khusus panitia.</p>
     <label class="field">
@@ -31,7 +31,8 @@
 <div id="dash-view" hidden>
   <header class="m-admin-head">
     <div class="row">
-      <div>
+      <img class="logo" src="../shared/img/logo-pw.png" alt="Logo PW IPM Kalimantan Timur">
+      <div class="m-admin-judul">
         <h1>Meja Registrasi</h1>
         <small id="last-update"></small>
       </div>
@@ -70,12 +71,13 @@
   <div class="m-list" id="list"></div>
 
   <div class="m-admin-bawah ganti-tampilan">
-    <a href="../cetak-qr.html" target="_blank">Cetak QR</a>
+    <a href="#" id="btn-qr">QR absensi</a>
     <a href="#" id="btn-logout">Keluar</a>
     <a href="#" data-ganti-tampilan="d">Tampilan desktop</a>
   </div>
 </div>
 
+<script src="../shared/js/lib/qrcode.min.js"></script>
 <script src="../shared/js/config.js"></script>
 <script src="../shared/js/util.js"></script>
 <script src="../shared/js/mock.js"></script>

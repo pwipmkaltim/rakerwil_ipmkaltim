@@ -42,19 +42,19 @@ a { color: var(--g2); }
 button, input, select { font: inherit; color: inherit; }
 .muted { color: var(--muted); }
 
-/* ---------- Logo sementara ---------- */
-.logo-mark {
-  display: inline-grid;
-  place-items: center;
-  width: 44px; height: 44px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, .18);
-  border: 1px solid rgba(255, 255, 255, .35);
-  color: #fff;
-  font-weight: 800;
-  font-size: 14px;
-  letter-spacing: .5px;
+/* ---------- Logo ----------
+ * Logo PW berwarna putih tanpa latar, jadi selalu ditaruh di atas hijau.
+ * .logo       = langsung di atas area bergradient
+ * .logo-badge = kotak hijau untuk dipakai di atas latar putih */
+.logo { display: block; height: 52px; width: auto; flex: 0 0 auto; }
+.logo-badge {
+  display: inline-grid; place-items: center;
+  width: 64px; height: 64px;
+  border-radius: 18px;
+  background: var(--grad);
+  box-shadow: 0 6px 16px rgba(31, 111, 95, .28);
 }
+.logo-badge img { height: 44px; width: auto; display: block; }
 
 /* ---------- Tombol ---------- */
 .btn {
@@ -332,6 +332,49 @@ button, input, select { font: inherit; color: inherit; }
 .p-nama { flex: 1; font-weight: 600; font-size: 14px; }
 .p-ket { font-size: 12px; color: var(--muted); }
 .kosong { text-align: center; padding: 40px 16px; color: var(--muted); }
+
+/* ---------- Pop-up konfirmasi ---------- */
+.modal-latar {
+  position: fixed; inset: 0; z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  background: rgba(10, 32, 28, .55);
+  backdrop-filter: blur(3px);
+  opacity: 0; transition: opacity .2s;
+}
+.modal-latar.tampil { opacity: 1; }
+.modal {
+  width: 100%; max-width: 420px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 26px 24px 20px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .25);
+  transform: translateY(12px) scale(.97);
+  transition: transform .22s ease;
+}
+.modal-latar.tampil .modal { transform: none; }
+.modal-ikon {
+  width: 52px; height: 52px; margin-bottom: 14px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: var(--g-soft); color: var(--g2);
+}
+.modal-ikon.bahaya { background: var(--bad-bg); color: var(--bad); }
+.modal h3 { font-size: 19px; font-weight: 800; margin-bottom: 6px; }
+.modal-pesan { color: var(--ink-2); font-size: 15px; }
+.modal-isi { margin-top: 16px; }
+.modal-aksi { display: flex; justify-content: flex-end; gap: 10px; margin-top: 22px; }
+.btn-bahaya { background: var(--bad); color: #fff; }
+.btn-bahaya:hover:not(:disabled) { background: #9a2e18; }
+
+/* QR di dalam pop-up */
+.qr-kotak {
+  display: grid; place-items: center;
+  padding: 16px; border-radius: 16px;
+  border: 2px solid var(--g-line);
+}
+.qr-kotak img, .qr-kotak canvas { display: block; max-width: 100%; height: auto; }
+.qr-url { margin-top: 10px; font-size: 12px; color: var(--muted); word-break: break-all; text-align: center; }
 
 /* ---------- Toast & banner ---------- */
 .toast {

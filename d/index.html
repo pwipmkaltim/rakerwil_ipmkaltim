@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pendaftaran Rakerwil PW IPM Kaltim</title>
+  <meta name="theme-color" content="#1f6f5f">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../shared/css/base.css">
+  <link rel="stylesheet" href="css/desktop.css">
+</head>
+<body data-ui="d">
+<div class="d-shell">
+
+  <!-- Panel kiri -->
+  <aside class="d-hero">
+    <div class="d-hero-top">
+      <span class="logo-mark">IPM</span>
+      <span class="d-hero-org">PW IPM Kalimantan Timur</span>
+    </div>
+
+    <div class="d-hero-mid">
+      <p class="d-eyebrow">Formulir Pendaftaran</p>
+      <h1 data-isi="namaAcara">Rapat Kerja Wilayah</h1>
+      <p class="d-hero-sub" data-isi="penyelenggara">Pimpinan Wilayah Ikatan Pelajar Muhammadiyah Kalimantan Timur</p>
+
+      <ol class="d-steps">
+        <li data-ind="1"><span class="n">1</span><div><b>Data Pimpinan</b><small>Nama peserta dan surat mandat</small></div></li>
+        <li data-ind="2"><span class="n">2</span><div><b>Pembayaran</b><small>SWP dan SWO</small></div></li>
+        <li data-ind="3"><span class="n">3</span><div><b>Selesai</b><small>Bukti pendaftaran</small></div></li>
+      </ol>
+    </div>
+
+    <p class="d-hero-foot">Pendaftaran dilakukan satu kali per pimpinan.</p>
+  </aside>
+
+  <!-- Panel kanan -->
+  <main class="d-main">
+    <div class="d-card">
+
+      <div id="loading" class="layar-tengah">
+        <div class="spinner"></div>
+        <p class="muted">Memuat formulir...</p>
+      </div>
+
+      <div id="error-box" class="layar-tengah" hidden>
+        <div class="ikon-besar bad">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+        </div>
+        <h2>Formulir gagal dimuat</h2>
+        <p class="muted" id="error-msg"></p>
+        <button class="btn btn-primary" id="btn-coba-lagi" style="margin-top:18px">Coba lagi</button>
+      </div>
+
+      <div id="form-wrap" hidden>
+
+        <!-- LANGKAH 1 -->
+        <section data-step="1">
+          <header class="d-sec-head">
+            <h2>Data Pimpinan</h2>
+            <p class="muted">Isi sesuai surat mandat yang dikeluarkan pimpinanmu.</p>
+          </header>
+
+          <label class="field">
+            <span class="label">Asal Pimpinan</span>
+            <select id="f-pimpinan" class="select"></select>
+            <div class="field-err" id="pimpinan-err" hidden></div>
+          </label>
+
+          <div class="field">
+            <div class="nama-head">
+              <span class="label">Nama Peserta</span>
+              <span class="nama-count" id="nama-count"></span>
+            </div>
+            <span class="hint">Tulis nama lengkap. Huruf besar-kecil dirapikan otomatis. Tekan Enter untuk menambah baris.</span>
+            <div id="nama-list"></div>
+            <button type="button" class="btn-tambah" id="btn-tambah-nama">+ Tambah nama</button>
+            <div class="field-err" id="nama-err" hidden></div>
+          </div>
+
+          <div class="field">
+            <span class="label">Surat Mandat</span>
+            <label class="file-drop">
+              <input type="file" id="f-mandat" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png">
+              <span class="ikon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M12 18v-6M9 15l3-3 3 3"/></svg></span>
+              <span class="teks"><b id="mandat-label" data-kosong="Klik untuk memilih file">Klik untuk memilih file</b><small>PDF, JPG, atau PNG. Maksimal <span data-maks-file>5</span> MB.</small></span>
+            </label>
+            <div class="field-err" id="mandat-err" hidden></div>
+          </div>
+        </section>
+
+        <!-- LANGKAH 2 -->
+        <section data-step="2" hidden>
+          <header class="d-sec-head">
+            <h2>Pembayaran</h2>
+            <p class="muted">SWP dihitung per nama, SWO sekali per pimpinan. Keduanya wajib meskipun yang hadir hanya satu orang.</p>
+          </header>
+
+          <div class="info warn" id="nominal-warning" hidden style="margin-bottom:16px">
+            <b>Nominal SWP dan SWO belum diisi panitia.</b> Total di bawah masih Rp0.
+          </div>
+
+          <div class="d-two">
+            <div>
+              <span class="label">Rincian</span>
+              <div class="rincian">
+                <div id="rincian"></div>
+                <div class="rincian-total"><span>Total yang harus dibayar</span><span class="angka" data-total>Rp0</span></div>
+              </div>
+            </div>
+            <div class="ringkas">
+              <span class="label" id="ringkas-pimpinan"></span>
+              <ol id="ringkas-nama"></ol>
+            </div>
+          </div>
+
+          <div class="field" style="margin-top:24px">
+            <span class="label">Cara Pembayaran</span>
+            <div class="metode-grid d-metode">
+              <label class="metode-opsi">
+                <input type="radio" name="metode" value="transfer">
+                <span class="radio-dot"></span>
+                <span><b>Transfer sekarang</b><small>Transfer ke rekening panitia lalu unggah buktinya.</small></span>
+              </label>
+              <label class="metode-opsi">
+                <input type="radio" name="metode" value="offline">
+                <span class="radio-dot"></span>
+                <span><b>Bayar di tempat</b><small>Bayar tunai di meja registrasi saat hari pelaksanaan.</small></span>
+              </label>
+            </div>
+            <div class="field-err" id="metode-err" hidden></div>
+
+            <div class="panel" id="panel-transfer" hidden>
+              <div class="rekening">
+                <div>
+                  <small id="rek-bank"></small>
+                  <div class="no" id="rek-no"></div>
+                  <small>a.n. <span id="rek-nama"></span></small>
+                </div>
+                <button type="button" class="btn btn-sm" id="btn-salin">Salin nomor</button>
+              </div>
+              <p style="margin-bottom:12px">Transfer sebesar <b data-total>Rp0</b>, lalu unggah bukti transfernya.</p>
+              <label class="file-drop">
+                <input type="file" id="f-bukti" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png">
+                <span class="ikon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></span>
+                <span class="teks"><b id="bukti-label" data-kosong="Unggah bukti transfer">Unggah bukti transfer</b><small>Screenshot atau foto struk. Maksimal <span data-maks-file>5</span> MB.</small></span>
+              </label>
+              <div class="field-err" id="bukti-err" hidden></div>
+            </div>
+
+            <div class="panel" id="panel-offline" hidden>
+              <p>Siapkan <b data-total>Rp0</b> dan bayarkan di meja registrasi.</p>
+              <p class="muted" id="offline-batas" style="margin-top:4px"></p>
+            </div>
+          </div>
+
+          <label class="cek">
+            <input type="checkbox" id="f-setuju">
+            <span>Data yang saya isi sudah sesuai dengan surat mandat dan tidak akan didaftarkan ulang.</span>
+          </label>
+          <div class="field-err" id="setuju-err" hidden></div>
+          <div class="field-err" id="kirim-err" hidden></div>
+        </section>
+
+        <!-- LANGKAH 3 -->
+        <section data-step="3" hidden>
+          <div class="layar-tengah" style="padding-bottom:24px">
+            <div class="ikon-besar ok">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+            </div>
+            <h2>Pendaftaran berhasil</h2>
+            <p class="muted">Simpan atau screenshot halaman ini sebagai bukti.</p>
+          </div>
+
+          <div class="d-hasil">
+            <div class="d-hasil-id"><small>Kode pendaftaran</small><b id="hasil-id"></b></div>
+            <dl>
+              <dt>Asal pimpinan</dt><dd id="hasil-pimpinan"></dd>
+              <dt>Waktu daftar</dt><dd id="hasil-waktu"></dd>
+              <dt>Total bayar</dt><dd id="hasil-total"></dd>
+              <dt>Status bayar</dt><dd id="hasil-status"></dd>
+              <dt>Peserta</dt><dd><ol id="hasil-nama"></ol></dd>
+            </dl>
+            <p class="info ok" id="hasil-catatan"></p>
+          </div>
+          <div style="text-align:center;margin-top:20px">
+            <button class="btn btn-outline" id="btn-daftar-lagi">Daftarkan pimpinan lain</button>
+          </div>
+        </section>
+
+        <div class="d-actions" id="actions">
+          <button class="btn btn-ghost" id="btn-kembali" hidden>&larr; Kembali</button>
+          <span></span>
+          <button class="btn btn-primary" id="btn-lanjut">Lanjut ke pembayaran &rarr;</button>
+          <button class="btn btn-primary" id="btn-kirim" hidden>Kirim pendaftaran</button>
+        </div>
+      </div>
+    </div>
+
+    <p class="ganti-tampilan d-foot">Membuka dari HP? <a href="#" data-ganti-tampilan="m">Pakai tampilan mobile</a></p>
+  </main>
+</div>
+
+<script src="../shared/js/config.js"></script>
+<script src="../shared/js/util.js"></script>
+<script src="../shared/js/mock.js"></script>
+<script src="../shared/js/api.js"></script>
+<script src="../shared/js/daftar.js"></script>
+</body>
+</html>

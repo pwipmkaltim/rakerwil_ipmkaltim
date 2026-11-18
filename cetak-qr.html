@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cetak QR Absensi</title>
+  <meta name="robots" content="noindex">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shared/css/base.css">
+  <style>
+    body { background: #e9efed; }
+    .alat { max-width: 794px; margin: 20px auto 0; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 0 16px; }
+    .alat p { font-size: 13px; color: var(--muted); }
+    .kertas {
+      width: 794px; min-height: 1123px; /* A4 */
+      margin: 16px auto 40px;
+      background: #fff;
+      display: flex; flex-direction: column;
+      box-shadow: var(--shadow);
+    }
+    .atas { background: var(--grad); color: #fff; text-align: center; padding: 56px 40px 48px; }
+    .atas small { font-size: 18px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; opacity: .85; }
+    .atas h1 { font-size: 46px; font-weight: 800; line-height: 1.1; margin-top: 8px; }
+    .atas p { font-size: 18px; opacity: .9; margin-top: 10px; }
+    .tengah { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; }
+    #qr { padding: 22px; border: 3px solid var(--g1); border-radius: 24px; }
+    #qr img, #qr canvas { display: block; }
+    .langkah { margin-top: 36px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; width: 100%; max-width: 620px; text-align: center; }
+    .langkah div { font-size: 15px; color: var(--ink-2); }
+    .langkah b { display: grid; place-items: center; width: 38px; height: 38px; margin: 0 auto 8px; border-radius: 50%; background: var(--g-soft); color: var(--g2); font-size: 17px; }
+    .url { margin-top: 26px; font-size: 13px; color: var(--muted); word-break: break-all; text-align: center; }
+    .bawah { text-align: center; padding: 22px; font-size: 14px; color: var(--muted); border-top: 1px solid var(--line); }
+    @media print {
+      @page { size: A4; margin: 0; }
+      body { background: #fff; }
+      .alat { display: none; }
+      .kertas { margin: 0; box-shadow: none; width: 100%; min-height: 100vh; }
+      .atas { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .langkah b { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <div class="alat">
+    <p>QR ini mengarah ke halaman absensi. Absensi hanya bisa dipakai saat dibuka dari halaman admin.</p>
+    <button class="btn btn-primary" onclick="window.print()">Cetak / Simpan PDF</button>
+  </div>
+
+  <div class="kertas">
+    <div class="atas">
+      <small>Absensi Peserta</small>
+      <h1>Rapat Kerja Wilayah</h1>
+      <p>Pimpinan Wilayah Ikatan Pelajar Muhammadiyah Kalimantan Timur</p>
+    </div>
+    <div class="tengah">
+      <div id="qr"></div>
+      <div class="langkah">
+        <div><b>1</b>Scan QR pakai kamera HP</div>
+        <div><b>2</b>Pilih asal pimpinan dan namamu</div>
+        <div><b>3</b>Tekan <strong>Saya Hadir</strong></div>
+      </div>
+      <p class="url" id="url"></p>
+    </div>
+    <div class="bawah">Satu HP untuk satu peserta. Ada kendala? Hubungi meja registrasi.</div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    var url = new URL('absen.html', location.href).href;
+    document.getElementById('url').textContent = url;
+    if (window.QRCode) {
+      new QRCode(document.getElementById('qr'), {
+        text: url, width: 360, height: 360,
+        colorDark: '#10302a', colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    } else {
+      document.getElementById('qr').textContent = 'Gagal memuat pembuat QR. Cek koneksi internet.';
+    }
+  </script>
+</body>
+</html>

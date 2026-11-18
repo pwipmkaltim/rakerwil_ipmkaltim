@@ -1,0 +1,152 @@
+/* Tampilan DESKTOP */
+
+/* ---------- Kerangka 2 kolom (form daftar & absen) ---------- */
+.d-shell {
+  display: grid;
+  grid-template-columns: minmax(340px, 420px) 1fr;
+  min-height: 100vh;
+}
+.d-hero {
+  position: sticky; top: 0;
+  height: 100vh;
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 40px 40px 32px;
+  background: var(--grad);
+  color: #fff;
+  overflow: hidden;
+}
+.d-hero::after {
+  content: '';
+  position: absolute; right: -120px; bottom: -120px;
+  width: 360px; height: 360px;
+  border-radius: 50%;
+  border: 60px solid rgba(255, 255, 255, .06);
+  pointer-events: none;
+}
+.d-hero-top { display: flex; align-items: center; gap: 12px; }
+.d-hero-org { font-weight: 700; font-size: 14px; opacity: .95; }
+.d-eyebrow {
+  font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
+  opacity: .8; margin-bottom: 10px;
+}
+.d-hero h1 { font-size: 38px; line-height: 1.12; font-weight: 800; letter-spacing: -.5px; }
+.d-hero-sub { margin-top: 12px; font-size: 15px; opacity: .88; max-width: 320px; }
+.d-hero-foot { font-size: 13px; opacity: .75; position: relative; z-index: 1; }
+
+.d-steps { list-style: none; margin: 40px 0 0; padding: 0; }
+.d-steps li {
+  position: relative;
+  display: flex; gap: 14px; align-items: flex-start;
+  padding-bottom: 26px;
+  opacity: .6;
+  transition: opacity .2s;
+}
+.d-steps li:not(:last-child)::before {
+  content: ''; position: absolute; left: 15px; top: 34px; bottom: 4px;
+  width: 2px; background: rgba(255,255,255,.3);
+}
+.d-steps .n {
+  flex: 0 0 32px; height: 32px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.6);
+  font-weight: 800; font-size: 14px;
+}
+.d-steps b { display: block; font-size: 15px; }
+.d-steps small { font-size: 13px; opacity: .85; }
+.d-steps li.active, .d-steps li.done { opacity: 1; }
+.d-steps li.active .n { background: #fff; color: var(--g2); border-color: #fff; }
+.d-steps li.done .n { background: rgba(255,255,255,.25); border-color: transparent; font-size: 0; }
+.d-steps li.done .n::after { content: '\2713'; font-size: 15px; }
+
+.d-main { padding: 48px 56px; display: flex; flex-direction: column; align-items: center; }
+.d-card {
+  width: 100%; max-width: 760px;
+  background: var(--card);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: 36px 40px;
+}
+.d-sec-head { margin-bottom: 26px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+.d-sec-head h2 { font-size: 24px; font-weight: 800; margin-bottom: 4px; }
+
+.d-two { display: grid; gap: 14px; }
+.d-two .ringkas { order: -1; }
+.d-two .ringkas ol { columns: 2; column-gap: 28px; }
+.d-metode { grid-template-columns: 1fr 1fr; }
+
+.d-actions {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  margin-top: 28px; padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+.d-actions .btn-primary { padding: 13px 26px; }
+.d-foot { margin-top: 18px; }
+
+.d-hasil {
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  padding: 20px 24px;
+}
+.d-hasil-id {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 18px; margin-bottom: 16px;
+  border-radius: var(--r-sm);
+  background: var(--grad); color: #fff;
+}
+.d-hasil-id b { font-size: 24px; letter-spacing: 1px; }
+.d-hasil dl { display: grid; grid-template-columns: 140px 1fr; gap: 10px 16px; margin: 0 0 16px; }
+.d-hasil dt { color: var(--muted); font-size: 14px; }
+.d-hasil dd { margin: 0; font-weight: 600; }
+.d-hasil ol { margin: 0; padding-left: 18px; }
+
+/* ---------- Absen ---------- */
+.d-absen-card { max-width: 560px; }
+.d-absen-card .layar-tengah h2 { font-size: 24px; margin-bottom: 6px; }
+
+/* ---------- Admin ---------- */
+.d-admin { display: grid; grid-template-columns: 280px 1fr; min-height: 100vh; }
+.d-side {
+  position: sticky; top: 0; height: 100vh;
+  display: flex; flex-direction: column; gap: 22px;
+  padding: 28px 22px;
+  background: var(--grad); color: #fff;
+  overflow-y: auto;
+}
+.d-side h1 { font-size: 20px; line-height: 1.25; }
+.d-side small { opacity: .8; font-size: 13px; }
+.d-stats { display: grid; gap: 10px; }
+.d-stat { padding: 12px 14px; border-radius: 12px; background: rgba(255,255,255,.13); }
+.d-stat small { display: block; font-size: 12px; opacity: .85; }
+.d-stat b { font-size: 22px; font-weight: 800; }
+.d-absen-box {
+  padding: 14px; border-radius: 12px;
+  background: #fff; color: var(--ink);
+}
+.d-absen-box .row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.d-absen-box p { font-size: 12px; color: var(--muted); margin-top: 6px; }
+.d-side .btn-side { background: rgba(255,255,255,.15); color: #fff; width: 100%; justify-content: flex-start; }
+.d-side .btn-side:hover { background: rgba(255,255,255,.25); }
+.d-side .bawah { margin-top: auto; display: grid; gap: 8px; }
+
+.d-content { padding: 28px 36px; }
+.d-toolbar {
+  position: sticky; top: 0; z-index: 5;
+  display: flex; gap: 10px; align-items: center;
+  padding: 12px 0 16px;
+  background: var(--bg);
+}
+.d-toolbar .input { flex: 1; }
+.d-toolbar .select { width: 220px; }
+.d-toolbar .btn-outline { padding: 11px 14px; }
+.d-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(420px, 1fr)); gap: 16px; align-items: start; }
+.d-update { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+
+.d-login-wrap { min-height: 100vh; display: grid; place-items: center; background: var(--grad); padding: 24px; }
+.d-login {
+  width: 100%; max-width: 400px;
+  background: #fff; border-radius: 20px;
+  padding: 36px; box-shadow: 0 20px 60px rgba(0,0,0,.2);
+}
+.d-login h1 { font-size: 22px; margin: 14px 0 4px; }
+.d-login .logo-mark { background: var(--grad); border: 0; }

@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Absensi Rakerwil PW IPM Kaltim</title>
+  <meta name="theme-color" content="#1f6f5f">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../shared/css/base.css">
+  <link rel="stylesheet" href="css/desktop.css">
+</head>
+<body data-ui="d">
+<div class="d-shell">
+  <aside class="d-hero">
+    <div class="d-hero-top">
+      <span class="logo-mark">IPM</span>
+      <span class="d-hero-org">PW IPM Kalimantan Timur</span>
+    </div>
+    <div class="d-hero-mid">
+      <p class="d-eyebrow">Absensi Peserta</p>
+      <h1 data-isi="namaAcara">Rapat Kerja Wilayah</h1>
+      <p class="d-hero-sub" data-isi="penyelenggara">Pimpinan Wilayah Ikatan Pelajar Muhammadiyah Kalimantan Timur</p>
+    </div>
+    <p class="d-hero-foot">Pilih asal pimpinan, cari namamu, lalu tekan Saya Hadir.</p>
+  </aside>
+
+  <main class="d-main">
+    <div class="d-card d-absen-card">
+
+      <div id="loading" class="layar-tengah">
+        <div class="spinner"></div>
+        <p class="muted">Memuat...</p>
+      </div>
+
+      <div id="error-box" class="layar-tengah" hidden>
+        <div class="ikon-besar bad"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div>
+        <h2>Gagal memuat</h2>
+        <p class="muted" id="error-msg"></p>
+        <button class="btn btn-primary" id="btn-coba-lagi" style="margin-top:18px">Coba lagi</button>
+      </div>
+
+      <div id="v-tutup" class="layar-tengah" hidden>
+        <div class="ikon-besar tutup"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+        <h2>Absensi sedang ditutup</h2>
+        <p class="muted">Absensi dibuka panitia saat registrasi dimulai. Tunggu aba-aba dari panitia.</p>
+        <button class="btn btn-outline" id="btn-cek-lagi" style="margin-top:18px">Cek lagi</button>
+      </div>
+
+      <div id="v-sudah" class="layar-tengah" hidden>
+        <div class="ikon-besar ok"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <h2>Perangkat ini sudah dipakai absen</h2>
+        <p style="margin-top:10px"><b id="sudah-nama"></b><br><span class="muted" id="sudah-pimpinan"></span><br><span class="muted" id="sudah-waktu"></span></p>
+        <p class="muted" style="margin-top:14px">Kalau mau absen untuk orang lain, silakan ke meja registrasi.</p>
+      </div>
+
+      <div id="v-form" hidden>
+        <header class="d-sec-head">
+          <h2>Absensi Kehadiran</h2>
+          <p class="muted">Satu perangkat hanya untuk satu peserta.</p>
+        </header>
+        <label class="field">
+          <span class="label">Asal Pimpinan</span>
+          <select id="a-pimpinan" class="select"></select>
+        </label>
+        <div class="field" id="a-nama-wrap" hidden>
+          <span class="label">Pilih namamu</span>
+          <div class="peserta-list" id="a-nama-list"></div>
+        </div>
+        <div class="field-err" id="absen-err" hidden style="margin-bottom:14px"></div>
+        <button class="btn btn-primary" id="btn-hadir" disabled style="width:100%">Saya Hadir</button>
+      </div>
+
+      <div id="v-hasil" hidden>
+        <div class="layar-tengah" style="padding-bottom:20px">
+          <div class="ikon-besar ok"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
+          <h2>Kehadiran tercatat</h2>
+          <p style="margin-top:10px"><b id="hasil-nama" style="font-size:18px"></b><br><span class="muted" id="hasil-pimpinan"></span><br><span class="muted" id="hasil-waktu"></span></p>
+        </div>
+        <div id="hasil-bayar"></div>
+      </div>
+    </div>
+    <p class="ganti-tampilan d-foot"><a href="#" data-ganti-tampilan="m">Pakai tampilan mobile</a></p>
+  </main>
+</div>
+
+<script src="../shared/js/config.js"></script>
+<script src="../shared/js/util.js"></script>
+<script src="../shared/js/mock.js"></script>
+<script src="../shared/js/api.js"></script>
+<script src="../shared/js/absen.js"></script>
+</body>
+</html>
